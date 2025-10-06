@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icons\mainIcon.png" />
+    <None Remove="Icons\new-file.png" />
+    <None Remove="Icons\open-folder.png" />
+    <None Remove="Icons\save.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>4</VersionMinor>
+      <VersionMajor>2</VersionMajor>
+      <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SplashScreen Include="Icons\mainIcon - flash.png" />
+    <Resource Include="Icons\mainIcon.png" />
+    <Resource Include="Icons\new-file.png" />
+    <Resource Include="Icons\open-folder.png" />
+    <Resource Include="Icons\save.png" />
+  </ItemGroup>
+
+</Project>

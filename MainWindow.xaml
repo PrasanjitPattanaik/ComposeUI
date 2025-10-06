@@ -1,0 +1,97 @@
+<Window x:Class="XmlEditorChatApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:XmlEditorChatApp"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        Title="ComposeExpress"
+        Height="600" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI"
+        Icon="pack://application:,,,/Icons/mainIcon.png">
+
+    <!-- Resources -->
+    <Window.Resources>
+        <local:FileFolderIconConverter x:Key="FileFolderIconConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <!-- Rows: Top row for buttons, second row for panels -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Toolbar -->
+            <RowDefinition Height="*"/>
+            <!-- Main content -->
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <StackPanel Orientation="Horizontal" Margin="5,0,5,0" VerticalAlignment="Center">
+            <Button Click="OpenFolder_Click" Margin="2" Padding="5" ToolTip="Open a folder">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Icons/open-folder.png"
+                           Width="16" Height="16" Margin="0,0,5,0"/>
+                    <TextBlock Text="Open Folder"/>
+                </StackPanel>
+            </Button>
+
+            <Button Click="CreateFile_Click" Margin="2" Padding="5" ToolTip="Create new XML file">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Icons/new-file.png"
+                           Width="16" Height="16" Margin="0,0,5,0"/>
+                    <TextBlock Text="New File"/>
+                </StackPanel>
+            </Button>
+
+            <Button Click="SaveButton_Click" Margin="2" Padding="5" ToolTip="Save current file">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Icons/save.png"
+                           Width="16" Height="16" Margin="0,0,5,0"/>
+                    <TextBlock Text="Save"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <!-- Main content: Folder Explorer | Editor | Chat -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <!-- Folder Explorer -->
+                <ColumnDefinition Width="5*"/>
+                <!-- Tabbed Editor -->
+                <ColumnDefinition Width="3*"/>
+                <!-- Chat -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Folder Explorer -->
+            <DockPanel Grid.Column="0" Margin="5" LastChildFill="True">
+                <TreeView Name="FolderTree"
+                          SelectedItemChanged="FolderTree_SelectedItemChanged"/>
+            </DockPanel>
+
+            <!-- Tabbed XML Editor -->
+            <DockPanel Grid.Column="1" Margin="5" LastChildFill="True">
+                <TabControl Name="XmlTabControl"/>
+            </DockPanel>
+
+            <!-- Chat Panel -->
+            <DockPanel Grid.Column="2" Margin="5" LastChildFill="True">
+                <ListBox Name="ChatList"
+                         DockPanel.Dock="Top"
+                         Height="500"/>
+                <TextBox Name="ChatInput"
+                    DockPanel.Dock="Bottom"
+                    KeyDown="ChatInput_KeyDown"
+                    Height="30"
+                    VerticalContentAlignment="Center"
+                    Margin="0,5,0,0"
+                    Text="Type a message..."
+                    Foreground="Gray"
+                    GotFocus="ChatInput_GotFocus"
+                    LostFocus="ChatInput_LostFocus"/>
+
+            </DockPanel>
+        </Grid>
+    </Grid>
+</Window>
