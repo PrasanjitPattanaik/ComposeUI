@@ -9,21 +9,21 @@
         FontFamily="Segoe UI"
         Icon="pack://application:,,,/Icons/mainIcon.png">
 
-    <!-- Resources -->
+    <!-- Resources (removed unused FileFolderIconConverter to avoid XAML parse errors) -->
     <Window.Resources>
-        <local:FileFolderIconConverter x:Key="FileFolderIconConverter"/>
+        <!-- Add resources here if/when you actually use them in XAML -->
     </Window.Resources>
 
     <Grid>
+        <!-- Columns (single root col kept for clarity/consistency) -->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <!-- Rows: Top row for buttons, second row for panels -->
+
+        <!-- Rows: toolbar (auto) + main content (*) -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Toolbar -->
             <RowDefinition Height="*"/>
-            <!-- Main content -->
         </Grid.RowDefinitions>
 
         <!-- Toolbar -->
@@ -51,15 +51,28 @@
                     <TextBlock Text="Save"/>
                 </StackPanel>
             </Button>
+
+            <!-- Show/Hide Terminal toggle -->
+            <Button Name="ToggleTerminalButton"
+                    Click="ToggleTerminal_Click"
+                    Margin="12,2,2,2"
+                    Padding="5"
+                    ToolTip="Show or hide terminal">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Icons/terminal.png"
+                           Width="16" Height="16" Margin="0,0,5,0"/>
+                    <TextBlock Name="ToggleTerminalLabel" Text="Show Terminal"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
 
-        <!-- Main content: Folder Explorer | Editor | Chat -->
+        <!-- Main content: Folder Explorer | Editor(+Terminal) | Chat -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <!-- Folder Explorer -->
                 <ColumnDefinition Width="5*"/>
-                <!-- Tabbed Editor -->
+                <!-- Tabbed Editor + Terminal -->
                 <ColumnDefinition Width="3*"/>
                 <!-- Chat -->
             </Grid.ColumnDefinitions>
@@ -70,10 +83,56 @@
                           SelectedItemChanged="FolderTree_SelectedItemChanged"/>
             </DockPanel>
 
-            <!-- Tabbed XML Editor -->
-            <DockPanel Grid.Column="1" Margin="5" LastChildFill="True">
-                <TabControl Name="XmlTabControl"/>
-            </DockPanel>
+            <!-- Middle: Editor (top) + Splitter + Terminal (bottom) -->
+            <Grid Grid.Column="1" Margin="5" Name="EditorAndTerminalGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <!-- Editor -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Splitter -->
+                    <RowDefinition Height="200"/>
+                    <!-- Terminal (collapsible) -->
+                </Grid.RowDefinitions>
+
+                <!-- Tabbed XML Editor -->
+                <DockPanel Grid.Row="0" LastChildFill="True">
+                    <TabControl Name="XmlTabControl"/>
+                </DockPanel>
+
+                <!-- Resize Splitter -->
+                <GridSplitter Grid.Row="1"
+                              Height="5"
+                              HorizontalAlignment="Stretch"
+                              ResizeDirection="Rows"
+                              ShowsPreview="True"
+                              Background="Transparent"/>
+
+                <!-- Terminal -->
+                <Border Grid.Row="2"
+                        Name="TerminalContainer"
+                        BorderBrush="#333"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Background="Black"
+                        Padding="6"
+                        Visibility="Collapsed">
+                    <!-- start hidden -->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <TextBox Name="TerminalTextBox"
+                                 Background="Black"
+                                 Foreground="#C8FACC"
+                                 FontFamily="Consolas"
+                                 FontSize="13"
+                                 AcceptsReturn="True"
+                                 AcceptsTab="True"
+                                 IsReadOnly="False"
+                                 BorderThickness="0"
+                                 TextWrapping="Wrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Disabled"/>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
 
             <!-- Chat Panel -->
             <DockPanel Grid.Column="2" Margin="5" LastChildFill="True">
@@ -81,16 +140,15 @@
                          DockPanel.Dock="Top"
                          Height="500"/>
                 <TextBox Name="ChatInput"
-                    DockPanel.Dock="Bottom"
-                    KeyDown="ChatInput_KeyDown"
-                    Height="30"
-                    VerticalContentAlignment="Center"
-                    Margin="0,5,0,0"
-                    Text="Type a message..."
-                    Foreground="Gray"
-                    GotFocus="ChatInput_GotFocus"
-                    LostFocus="ChatInput_LostFocus"/>
-
+                         DockPanel.Dock="Bottom"
+                         KeyDown="ChatInput_KeyDown"
+                         Height="30"
+                         VerticalContentAlignment="Center"
+                         Margin="0,5,0,0"
+                         Text="Type a message..."
+                         Foreground="Gray"
+                         GotFocus="ChatInput_GotFocus"
+                         LostFocus="ChatInput_LostFocus"/>
             </DockPanel>
         </Grid>
     </Grid>
